@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Report</title>
+</head>
+<style>
+  body {
+    background: linear-gradient(135deg, #e9faff, #0072ff);
+    min-height: 100vh;
+    margin: 0;
+}
+#weatherApp {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #fff;
+    width: 320px;
+    margin: 60px auto;
+    padding: 20px 14px 24px 14px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px #b6c6e633;
+}
+input[type="text"] {
+    width: 70%;
+    padding: 7px;
+    border: 1px solid #b6c6e6;
+    border-radius: 5px;
+    font-size: 15px;
+}
+button {
+    padding: 7px 16px;
+    border: none;
+    border-radius: 5px;
+    background: #0072ff;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    margin-left: 4px;
+    margin-top: 15px;
+}
+#weatherReport {
+    margin-top: 16px;
+    font-size: 15px;
+    color: #2563eb;
+}
+img{
+    display: block;
+    margin: 0 auto 12px auto;
+    width: 70px;    
+    height: 70px;
+    border-radius: 20%;
+    box-shadow: 0 2px 8px #b6c6e6;
+    object-fit: cover;
+    background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+}
+</style>
+<body>
+    
+    <div id="weatherApp">
+        <img src="weather1.jpg">
+    <h1>Weather Report</h1>
+    <input type="text" id="city" placeholder="Enter city name">
+    <button id="getWeather">Search</button>
+    <div id="weatherReport"></div>
+</div>
+    <script>
+        document.getElementById('getWeather').addEventListener('click', function() {
+            const city = document.getElementById('city').value;
+            if (city) {
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=b1321907baf0bdf02fe79281ba1f9be7&units=metric`;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const weatherReport = document.getElementById('weatherReport');
+                        weatherReport.innerHTML = `
+                            <h2> ${data.name}</h2>
+                            <p>Temperature: ${data.main.temp} °C</p>
+                            <p>Humidity: ${data.main.humidity}%</p>
+                            <p>Weather: ${data.weather[0].description}</p>
+                        `;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching weather data:', error);
+                        document.getElementById('weatherReport').innerHTML = `<p>Error fetching weather data.</p>`;
+                    });
+            } else {
+                document.getElementById('weatherReport').innerHTML = `<p>Please enter a city name.</p>`;
+            }
+        });
+
+    </script>
+
+</body>
+</html>
